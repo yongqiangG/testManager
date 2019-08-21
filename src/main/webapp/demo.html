@@ -1,0 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>this is test kindetior</title>
+
+    <link rel="stylesheet" href="js/editor/themes/default/default.css" />
+    <script src="js/editor/kindeditor-all-min.js"></script>
+    <script src="js/editor/lang/zh-CN.js"></script>
+</head>
+
+<body>
+
+
+<form method="post" action="http://localhost:8885/test/kindservlet">
+              <textarea id="editor_id" name="content"
+                        style="width: 700px; height: 300px;">
+        请输入......
+        </textarea>
+    <input type="submit" value="提交" onclick="submitForm()">
+</form>
+
+<script>
+    KindEditor.ready(function (K) {
+        window.editor = K.create('#editor_id', {
+//这里是指定的文件上传input的的属性名
+            filePostName: "uploadFile",
+//这里就是指定文件上传的请求地址，上面也已经说了，upload_json.jsp就相当去一个servlet去进行保存文件，这个地方很重要
+            uploadJson: 'http://localhost:8885/johnnyBlog/test/upload.do',
+            resizeType: 1,
+            allowPreviewEmoticons: true,
+            allowImageUpload: true,
+        });
+    })
+</script>
+
+</body>

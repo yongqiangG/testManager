@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>测试管理系统</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+<link rel="apple-touch-icon-precomposed" href="images/icon.png">
+<link rel="shortcut icon" href="images/favicon.ico">
+<script src="js/jquery-2.1.4.min.js"></script>
+<!-- 引入kindeditor -->
+<script src="js/editor/kindeditor-all-min.js"></script>
+<script src="js/editor/lang/zh-CN.js"></script>
+<link rel="stylesheet" href="js/editor/themes/default/default.css" />
+<script>
+    //初始化编辑器
+    /* var KE;
+    KindEditor.ready(function (K) {
+        KE = K.create('#Contents', {
+            allowFileManager: true, //浏览图片空间
+            filterMode: false, //HTML特殊代码过滤
+            afterBlur: function () { this.sync(); }, //编辑器失去焦点(blur)时执行的回调函数（将编辑器的HTML数据同步到textarea）
+            afterUpload: function (url, data, name) { //上传文件后执行的回调函数，必须为3个参数
+                if (name == "image" || name == "multiimage") { //单个和批量上传图片时
+                    var img = new Image(); img.src = url;
+                    img.onload = function () { //图片必须加载完成才能获取尺寸
+                        if (img.width > 100) {
+                            KE.html(KE.html().replace('<img src="' + url + '" width="100" height="100"/>', '<img src="' + url + '" width="100" height="100px"/>'))
+                            //KE.html(KE.html().replace('<img src="' + url + '" width="300"/>', '<img src="' + url + '" width="300"/>'))
+                        }
+                   
+                    }
+                }
+            }
+        });
+        KindEditor.create('#Contents', { allowImageUpload: false, resizeType: 1, width: "600px", height: "300px" });
+    }); */
+	var editor; 
+	KindEditor.ready(function(K){
+		var option = {width:"680px",height:"300px",uploadJson:"http://localhost:8885/johnnyBlog/upload/uploadController.do",
+		allowImageUpload:true,afterUpload:function(data){
+		},afterCrate:function(){
+			this.sync();
+		},afterBlur:function(){
+			$("contents").val(this.html());
+		}};
+		editor=K.create("#content",option);
+	});
+	//获取编辑器实例
+	
+	//发送bug存储
+	function sendBug(){
+		//获取bug信息
+		var product = $("#product option:selected").index();
+		var module = $("#module option:selected").index();
+		var project = $("#project option:selected").index();
+		var version = $("#version").val();
+		var person = $("#person option:selected").index();
+		var deadline = $("#dead-line").val();
+		var bugtype = $("#bugtype option:selected").index();
+		var bugtitle = $("#bug-title").val();
+		var contents = editor.html();
+		//console.log(product+","+module+","+project+","+version+","+person+","+deadline+","+bugtype+","+bugtitle+","+contents);
+		//发送请求
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/saveBug.do",
+			type:"post",
+			data:{"product":product,"module":module,"project":project,"version":version,"person":person,"deadline":deadline,"bugtype":bugtype,"bugtitle":bugtitle,"contents":contents},
+			dataType:"json",
+			success:function(result){
+				//alert("保存成功");
+				$("#mymodal p").html("新增成功");
+				$("#mymodalFooter").html("即将跳转BUG页面");
+				setTimeout(function(){
+					location.href="/johnnyBlog/loadBug.html";
+				},2000);
+				
+			},
+			error:function(result){
+				//alert("提交失败");
+				$("#mymodal p").html("新增失败，请仔细检查所有参数是否正确填写");
+				$("#mymodalFooter").html("即将返回新增BUG页面");
+				setTimeout(function(){
+					$("#mymodal").modal("hide")
+				},2000);
+			}
+		})
+	}
+		//console.log("sendBug()");
+
+</script>
+<!--[if gte IE 9]>
+  <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+  <script src="js/html5shiv.min.js" type="text/javascript"></script>
+  <script src="js/respond.min.js" type="text/javascript"></script>
+  <script src="js/selectivizr-min.js" type="text/javascript"></script>
+<![endif]-->
+<!--[if lt IE 9]>
+  <script>window.location.href='upgrade-browser.html';</script>
+<![endif]-->
+</head>
+
+<body class="user-select">
+<section class="container-fluid">
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"> <span class="sr-only">切换导航</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+          <a class="navbar-brand" href="/">天翔园测试管理系统</a> </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="">消息 <span class="badge">1</span></a></li>
+            <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">admin <span class="caret"></span></a>
+              <ul class="dropdown-menu dropdown-menu-left">
+                <li><a title="查看或修改个人信息" data-toggle="modal" data-target="#seeUserInfo">个人信息</a></li>
+                <li><a title="查看您的登录记录" data-toggle="modal" data-target="#seeUserLoginlog">登录记录</a></li>
+              </ul>
+            </li>
+            <li><a href="login.html" onClick="if(!confirm('是否确认退出？'))return false;">退出登录</a></li>
+            <li><a data-toggle="modal" data-target="#WeChat">帮助</a></li>
+          </ul>
+          <form action="" method="post" class="navbar-form navbar-right" role="search">
+            <div class="input-group">
+              <input type="text" class="form-control" autocomplete="off" placeholder="键入关键字搜索" maxlength="15">
+              <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">搜索</button>
+              </span> </div>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="row">
+    <aside class="col-sm-3 col-md-2 col-lg-2 sidebar">
+      <!-- <ul class="nav nav-sidebar">
+        <li><a href="index.html">我的地盘</a></li>
+      </ul> -->
+      <!-- <ul class="nav nav-sidebar">
+        <li><a href="article.html">产品</a></li>
+        <li><a href="notice.html">项目</a></li>
+        <li><a href="comment.html">评论</a></li>
+        <li><a data-toggle="tooltip" data-placement="top" title="网站暂无留言功能">留言</a></li>
+      </ul> -->
+      <ul class="nav nav-sidebar">
+        <li class="active"><a href="/johnnyBlog/addBug.html">提交Bug</a></li>
+        <li class=""><a href="/johnnyBlog/loadBug.html">所有Bug</a></li>
+      </ul>
+      <!-- <ul class="nav nav-sidebar">
+        <li><a class="dropdown-toggle" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">用户</a>
+          <ul class="dropdown-menu" aria-labelledby="userMenu">
+            <li><a href="#">管理用户组</a></li>
+            <li><a href="manage-user.html">管理用户</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="loginlog.html">管理登录日志</a></li>
+          </ul>
+        </li>
+        <li><a class="dropdown-toggle" id="settingMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">设置</a>
+          <ul class="dropdown-menu" aria-labelledby="settingMenu">
+            <li><a href="setting.html">基本设置</a></li>
+            <li><a href="readset.html">用户设置</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">安全配置</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="disabled"><a>扩展菜单</a></li>
+          </ul>
+        </li>
+      </ul> -->
+    </aside>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+      <div class="row">
+        <div class="col-md-5">
+          <h1 class="page-header">添加Bug</h1>
+          <form action="##" onsubmit="return false" method="post" autocomplete="off" enctype="multipart/form-data"><!-- enctype="multipart/form-data" -->
+          	<div class="form-group">
+              <label for="product">所属产品</label>
+              <select id="product" class="form-control" name="product-name">
+                <!-- 从数据库中获取下拉选的值 -->
+              </select>
+              <span class="prompt-text">产品名称</span></div>
+          	<!-- <div class="form-group">
+              <label for="product-name">所属产品</label>
+              <input type="text" id="product-name" name="name" class="form-control" placeholder="在此处输入产品名称" required autocomplete="off">
+              <span class="prompt-text">产品名称</span> </div> -->
+              <div class="form-group">
+              <label for="module">所属模块</label>
+              <select id="module" class="form-control" name="module-name">
+                <!-- 从数据库中获取下拉选的值 -->
+              </select>
+              <span class="prompt-text">模块名称</span></div>
+            <!-- <div class="form-group">
+              <label for="module-name">所属模块</label>
+              <input type="text" id="module-name" name="name" class="form-control" placeholder="在此处输入模块名称" required autocomplete="off">
+              <span class="prompt-text">模块名称</span> </div> -->
+              <div class="form-group">
+              <label for="project">所属项目</label>
+              <select id="project" class="form-control" name="project-name">
+                <!-- 从数据库中获取下拉选的值 -->
+              </select>
+              <span class="prompt-text">项目名称</span></div>
+            <!-- <div class="form-group">
+              <label for="project-name">所属项目</label>
+              <input type="text" id="project-name" name="alias" class="form-control" placeholder="在此处输入项目名称" required autocomplete="off">
+              <span class="prompt-text">项目名称</span> </div> -->
+            <div class="form-group">
+              <label for="version">影响版本</label>
+              <input type="text" id="version" name="alias" class="form-control" placeholder="在此处输入版本号" required autocomplete="off">
+              <span class="prompt-text">版本号</span> </div>
+              <div class="form-group">
+              <label for="person">指派人员</label>
+              <select id="person" class="form-control" name="person-name">
+                <!-- 从数据库中获取下拉选的值 -->
+              </select>
+              <span class="prompt-text">指派人员名称</span></div>
+            <!-- <div class="form-group">
+              <label for="fix-up">指派人员</label>
+              <input type="text" id="fix-up" name="alias" class="form-control" placeholder="在此处输入指派人员" required autocomplete="off">
+              <span class="prompt-text">指定bug修复责任人</span> </div> -->
+              <div class="form-group">
+              <label for="dead-line">截止日期</label><br/>
+              <input id="dead-line" type="date" value=""/><br/>
+              <span class="prompt-text">bug修复截止日期</span></div>
+            <!-- <div class="form-group">
+              <label for="dead-line">截止日期</label>
+              <input type="text" id="dead-line" name="alias" class="form-control" placeholder="在此处输入截止日期" required autocomplete="off">
+              <span class="prompt-text">bug修复截止日期</span> </div> -->
+              <div class="form-group">
+              <label for="bugtype">bug类型</label>
+              <select id="bugtype" class="form-control" name="bugtype-name">
+                <!-- 从数据库中获取下拉选的值 -->
+              </select>
+              <span class="prompt-text">bug类型</span></div>
+            <!-- <div class="form-group">
+              <label for="bug-type">bug类型</label>
+              <input type="text" id="bug-type" name="alias" class="form-control" placeholder="在此处输入bug类型" required autocomplete="off">
+              <span class="prompt-text">bug类型</span> </div> -->
+            <div class="form-group">
+              <label for="bug-title">bug标题</label>
+              <input type="text" id="bug-title" name="alias" class="form-control" placeholder="在此处输入bug标题" required autocomplete="off">
+              <span class="prompt-text">bug标题</span> </div>
+            <!-- <div class="form-group">
+              <label for="bug-step">bug复现步骤</label>
+              <input type="text" id="bug-step" name="alias" class="form-control" placeholder="在此处输入bug复现步骤" required autocomplete="off">
+              <span class="prompt-text">bug复现步骤</span> </div>
+            <div class="form-group">
+              <label for="bug-result">bug复现结果</label>
+              <input type="text" id="bug-result" name="alias" class="form-control" placeholder="在此处输入bug复现结果" required autocomplete="off">
+              <span class="prompt-text">bug复现结果</span> </div>
+             <div class="form-group">
+              <label for="bug-expect">bug预期结果</label>
+              <input type="text" id="bug-expect" name="alias" class="form-control" placeholder="在此处输入bug预期结果" required autocomplete="off">
+              <span class="prompt-text">bug预期结果</span> </div> -->
+              <div class="form-group">
+                                            重现步骤
+              <input type="hidden" id="contents" name="content">
+              <textarea id="content" name="description">
+					<h4>【步骤】</h4><br/><br/>
+					<h4>【结果】</h4><br/><br/>
+					<h4>【预期】</h4><br/><br/>
+			  </textarea>
+			  </div>
+            <!-- 下拉选模板
+            <div class="form-group">
+              <label for="category-fname">父节点</label>
+              <select id="category-fname" class="form-control" name="fid">
+                <option value="0" selected>无</option>
+                <option value="1">前端技术</option>
+                <option value="2">后端程序</option>
+                <option value="3">管理系统</option>
+                <option value="4">授人以渔</option>
+                <option value="5">程序人生</option>
+              </select>
+              <span class="prompt-text">栏目是有层级关系的，您可以有一个“音乐”分类目录，在这个目录下可以有叫做“流行”和“古典”的子目录。</span> </div> -->
+            <!-- <input type="button" value="提交" onclick="sendBug()" class="btn btn-primary" /> -->
+            <!-- 触发模态弹出窗的元素 -->
+			<button type="button" data-toggle="modal" data-target="#mymodal" class="btn btn-primary" onclick="sendBug()">新增Bug</button>
+			<!-- 模态弹出窗 -->
+			<div class="modal fade" id="mymodal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			                <h4 class="modal-title">新增BUG</h4>
+			            </div>
+			            <div class="modal-body">
+			                <p></p>
+			            </div>
+			            <div class="modal-footer">
+			            	<span id="mymodalFooter"></span>
+			                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="button" class="btn btn-primary">保存</button> -->
+			            </div>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+          </form>
+        </div>
+        <!-- <div class="col-md-7">
+          <h1 class="page-header">管理 <span class="badge">3</span></h1>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th><span class=""></span> <span class="visible-lg">bug标题</span></th>
+                  <th><span class=""></span> <span class="visible-lg">产品</span></th>
+                  <th><span class=""></span> <span class="visible-lg">模块</span></th>
+                  <th><span class=""></span> <span class="visible-lg">项目</span></th>
+                  <th><span class=""></span> <span class="visible-lg">截止日期</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>播放异常</td>
+                  <td>TK3970</td>
+                  <td>音乐模块</td>
+                  <td>3.0丽枫</td>
+                  <td>2019-07-20</td>
+                </tr>
+                <tr>
+                  <td>唤醒异常</td>
+                  <td>TK3971</td>
+                  <td>音乐模块</td>
+                  <td>3.0丽枫</td>
+                  <td>2019-07-25</td>
+                </tr>
+                <tr>
+                  <td>逻辑发送异常</td>
+                  <td>客控后台</td>
+                  <td>无</td>
+                  <td>无</td>
+                  <td>2019-07-29</td>
+                </tr>
+              </tbody>
+            </table>
+            <span class="prompt-text"><strong>注：</strong>请及时解决bug</span> </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</section>
+<!--个人信息模态框-->
+<div class="modal fade" id="seeUserInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <form action="" method="post">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" >个人信息</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table" style="margin-bottom:0px;">
+            <thead>
+              <tr> </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td wdith="20%">姓名:</td>
+                <td width="80%"><input type="text" value="王雨" class="form-control" name="truename" maxlength="10" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">用户名:</td>
+                <td width="80%"><input type="text" value="admin" class="form-control" name="username" maxlength="10" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">电话:</td>
+                <td width="80%"><input type="text" value="18538078281" class="form-control" name="usertel" maxlength="13" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">旧密码:</td>
+                <td width="80%"><input type="password" class="form-control" name="old_password" maxlength="18" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">新密码:</td>
+                <td width="80%"><input type="password" class="form-control" name="password" maxlength="18" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">确认密码:</td>
+                <td width="80%"><input type="password" class="form-control" name="new_password" maxlength="18" autocomplete="off" /></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr></tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!--个人登录记录模态框-->
+<div class="modal fade" id="seeUserLoginlog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" >登录记录</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table" style="margin-bottom:0px;">
+          <thead>
+            <tr>
+              <th>登录IP</th>
+              <th>登录时间</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>::1:55570</td>
+              <td>2016-01-08 15:50:28</td>
+              <td>成功</td>
+            </tr>
+            <tr>
+              <td>::1:64377</td>
+              <td>2016-01-08 10:27:44</td>
+              <td>成功</td>
+            </tr>
+            <tr>
+              <td>::1:64027</td>
+              <td>2016-01-08 10:19:25</td>
+              <td>成功</td>
+            </tr>
+            <tr>
+              <td>::1:57081</td>
+              <td>2016-01-06 10:35:12</td>
+              <td>成功</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">朕已阅</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--微信二维码模态框-->
+<div class="modal fade user-select" id="WeChat" tabindex="-1" role="dialog" aria-labelledby="WeChatModalLabel">
+  <div class="modal-dialog" role="document" style="margin-top:120px;max-width:280px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="WeChatModalLabel" style="cursor:default;">微信扫一扫</h4>
+      </div>
+      <div class="modal-body" style="text-align:center"> <img src="images/weixin.jpg" alt="" style="cursor:pointer"/> </div>
+    </div>
+  </div>
+</div>
+<!--提示模态框-->
+<div class="modal fade user-select" id="areDeveloping" tabindex="-1" role="dialog" aria-labelledby="areDevelopingModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="areDevelopingModalLabel" style="cursor:default;">该功能正在日以继夜的开发中…</h4>
+      </div>
+      <div class="modal-body"> <img src="images/baoman/baoman_01.gif" alt="深思熟虑" />
+        <p style="padding:15px 15px 15px 100px; position:absolute; top:15px; cursor:default;">很抱歉，程序猿正在日以继夜的开发此功能，本程序将会在以后的版本中持续完善！</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">朕已阅</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--右键菜单列表-->
+<div id="rightClickMenu">
+  <ul class="list-group rightClickMenuList">
+    <li class="list-group-item disabled">欢迎访问异清轩博客</li>
+    <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
+    <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
+    <li class="list-group-item"><span>系统：</span>Windows10 </li>
+    <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
+  </ul>
+</div>
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/admin-scripts.js"></script> 
+<script>
+//
+$(function(){
+		//清空下拉选
+		//$("#product").remove();
+		//alert("产品加载测试");
+		//加载产品列表
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/loadproduct.do",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				//alert("查询成功");
+				$("#product").prepend("<option value='0' selected>请选择</option>");
+				var products = result.data;
+				//console.log(products);
+				for(var i=0;i<products.length;i++){
+					$("#product").append("<option value='"+products[i]+"'>"+products[i]+"</option>");
+				}
+			},
+			error:function(){
+				alert("产品加载失败");
+			}
+		});
+		//加载项目列表
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/loadproject.do",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				//alert("查询成功");
+				$("#project").prepend("<option value='0' selected>请选择</option>");
+				var projects = result.data;
+				//console.log(projects);
+				for(var i=0;i<projects.length;i++){
+					$("#project").append("<option value='"+projects[i]+"'>"+projects[i]+"</option>");
+				}
+			},
+			error:function(){
+				alert("项目加载失败");
+			}
+		});
+		//加载模块列表
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/loadmodule.do",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				//alert("查询成功");
+				$("#module").prepend("<option value='0' selected>请选择</option>");
+				var modules = result.data;
+				//console.log(modules);
+				for(var i=0;i<modules.length;i++){
+					$("#module").append("<option value='"+modules[i]+"'>"+modules[i]+"</option>");
+				}
+			},
+			error:function(){
+				alert("产品加载失败");
+			}
+		});
+		//加载人员列表
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/loadperson.do",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				//alert("查询成功");
+				$("#person").prepend("<option value='0' selected>请选择</option>");
+				var persons = result.data;
+				//console.log(persons);
+				for(var i=0;i<persons.length;i++){
+					$("#person").append("<option value='"+persons[i]+"'>"+persons[i]+"</option>");
+				}
+			},
+			error:function(){
+				alert("产品加载失败");
+			}
+		});
+		//加载bug类型列表
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/loadbugtype.do",
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				//alert("查询成功");
+				$("#bugtype").prepend("<option value='0' selected>请选择</option>");
+				var bugtypes = result.data;
+				//console.log(bugtypes);
+				for(var i=0;i<bugtypes.length;i++){
+					$("#bugtype").append("<option value='"+bugtypes[i]+"'>"+bugtypes[i]+"</option>");
+				}
+			},
+			error:function(){
+				alert("产品加载失败");
+			}
+		});
+		//日期默认赋值
+		var date = new Date();
+		var year = date.getFullYear();
+		var month = date.getMonth()+1;
+		var day = date.getDate();
+		if(month<10){
+			month = "0"+month;
+		}
+		if(day<10){
+			day = "0"+day;
+		}
+		$("#dead-line").val(year+"-"+month+"-"+day);
+})
+//下拉选取值测试
+/* $(document).on("change","#product",function(){
+	var condition = $(this).val();
+	console.log(condition);
+}) */
+//是否确认删除
+$(function(){   
+	$("#main table tbody tr td a").click(function(){
+		var name = $(this);
+		var id = name.attr("rel"); //对应id  
+		if (event.srcElement.outerText === "删除") 
+		{
+			if(window.confirm("此操作不可逆，是否确认？"))
+			{
+				$.ajax({
+					type: "POST",
+					url: "/Category/delete",
+					data: "id=" + id,
+					cache: false, //不缓存此页面   
+					success: function (data) {
+						window.location.reload();
+					}
+				});
+			};
+		};
+	});   
+});
+</script>
+</body>
+</html>

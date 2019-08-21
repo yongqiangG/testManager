@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.johnny.johnnyBlog.dao.BloggerDao">
+ 	<select id="findByUsername" parameterType="string" resultType="com.johnny.johnnyBlog.entity.Blogger">
+ 		select * from blogger where username=#{name}
+ 	</select>
+ </mapper>
