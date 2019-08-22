@@ -40,7 +40,7 @@
 			editor=K.create("#content",option);
 		});
 		//alert("初始化编辑器")
-		console.log("5")
+		//console.log("5")
 	};
 	//从URL截取bugId的值
 	function getBugId(name) {
@@ -83,7 +83,7 @@
 					var deadline = new Date(bug.deadline).toLocaleString();
 					var bugType = bug.bugtype_name;
 					var bugTitle = bug.bug_title;
-					console.log(bugContent+','+product+','+module+','+project+','+version+','+person+','+deadline+','+bugType+','+bugTitle);
+					//console.log(bugContent+','+product+','+module+','+project+','+version+','+person+','+deadline+','+bugType+','+bugTitle);
 					$("#bugTitle").html(bugTitle);
 					$("#bugContent").html(bugContent);
 					$("#product").html(product);
@@ -93,6 +93,9 @@
 					$("#person").html(person);
 					$("#deadline").html(deadline);
 					$("#bugType").html(bugType);
+					//word-wrap: break-word;word-break: break-all
+					$("#bugContent").css("word-wrap","break-word");
+					$("#bugContent").css("word-break","break-all");
 					//$("img").attr("width","100%");
 					//设定图片显示尺寸
 					$("img").each(function(i){
@@ -410,7 +413,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="WeChatModalLabel" style="cursor:default;">微信扫一扫</h4>
       </div>
-      <div class="modal-body" style="text-align:center"> <img src="images/weixin.jpg" alt="" style="cursor:pointer"/> </div>
+      <div class="modal-body" style="text-align:center"> <!-- <img src="images/weixin.jpg" alt="" style="cursor:pointer"/> --> </div>
     </div>
   </div>
 </div>
@@ -422,7 +425,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="areDevelopingModalLabel" style="cursor:default;">该功能正在日以继夜的开发中…</h4>
       </div>
-      <div class="modal-body"> <img src="images/baoman/baoman_01.gif" alt="深思熟虑" />
+      <div class="modal-body"><!--  <img src="images/baoman/baoman_01.gif" alt="深思熟虑" /> -->
         <p style="padding:15px 15px 15px 100px; position:absolute; top:15px; cursor:default;">很抱歉，程序猿正在日以继夜的开发此功能，本程序将会在以后的版本中持续完善！</p>
       </div>
       <div class="modal-footer">
@@ -442,10 +445,6 @@
   </ul>
 </div>
 <script src="js/bootstrap.min.js"></script> 
-<script src="js/admin-scripts.js"></script>
-<script src="lib/ueditor/ueditor.config.js"></script> 
-<script src="lib/ueditor/ueditor.all.min.js"> </script> 
-<script src="lib/ueditor/lang/zh-cn/zh-cn.js"></script>  
 <script id="uploadEditor" type="text/plain" style="display:none;"></script>
 <!-- <script type="text/javascript">
 var editor = UE.getEditor('article-content');
