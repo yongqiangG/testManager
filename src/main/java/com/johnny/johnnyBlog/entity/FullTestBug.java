@@ -13,6 +13,7 @@ public class FullTestBug {
 	private String bugtype_name;
 	private String bug_title;
 	private String bug_content;
+	private String bug_content_withoutHtml;
 	public String getBug_id() {
 		return bug_id;
 	}
@@ -73,12 +74,19 @@ public class FullTestBug {
 	public void setBug_content(String bug_content) {
 		this.bug_content = bug_content;
 	}
+	
 	@Override
 	public String toString() {
 		return "FullTestBug [bug_id=" + bug_id + ", product_name=" + product_name + ", module_name=" + module_name
 				+ ", project_name=" + project_name + ", version=" + version + ", person_name=" + person_name
 				+ ", deadline=" + deadline + ", bugtype_name=" + bugtype_name + ", bug_title=" + bug_title
-				+ ", bug_content=" + bug_content + "]";
+				+ ", bug_content=" + bug_content + ", bug_content_withoutHtml=" + bug_content_withoutHtml + "]";
+	}
+	public String getBug_content_withoutHtml() {
+		return bug_content_withoutHtml;
+	}
+	public void setBug_content_withoutHtml(String bug_content_withoutHtml) {
+		this.bug_content_withoutHtml = bug_content_withoutHtml;
 	}
 	
 	

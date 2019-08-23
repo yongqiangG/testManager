@@ -122,8 +122,8 @@ public class BloggerDaoTest {
 	//测试findBugById的Dao
 	public void test9() {
 		TestDao dao = ac.getBean("testDao",TestDao.class);
-		FullTestBug b = dao.findBugById("3");
-		System.out.println(b);
+		FullTestBug b = dao.findBugById("39");
+		System.out.println(b.getBug_content_withoutHtml());
 	}
 	@Test
 	//测试findBugById的Service方法

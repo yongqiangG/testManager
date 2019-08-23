@@ -167,6 +167,10 @@ public class TestServiceImpl implements TestService {
 	public void updateBug(TestBug bug) {
 		dao.updateBugById(bug);
 	}
+	public FullTestBug getPdf(String bugId) {
+		FullTestBug bug = dao.findBugById(bugId);
+		return bug;
+	}
 	
 
 }

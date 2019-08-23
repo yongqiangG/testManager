@@ -18,7 +18,7 @@
  		select bugtype_name from bugtype
  	</select>
  	<insert id="saveBug" parameterType="com.johnny.johnnyBlog.entity.TestBug">
- 		insert into bug(product_id,module_id,project_id,version,person_id,deadline,bugtype_id,bug_title,bug_content) values (#{product_id},#{module_id},#{project_id},#{version},#{person_id},#{deadline},#{bugtype_id},#{bug_title},#{bug_content})
+ 		insert into bug(product_id,module_id,project_id,version,person_id,deadline,bugtype_id,bug_title,bug_content,bug_content_withoutHtml) values (#{product_id},#{module_id},#{project_id},#{version},#{person_id},#{deadline},#{bugtype_id},#{bug_title},#{bug_content},#{bug_content_withoutHtml})
  	</insert>
  	<select id="loadBug" resultType="com.johnny.johnnyBlog.entity.TestBug">
  		select * from bug
@@ -39,7 +39,7 @@
 		order by a.bug_id desc
  	</select>
  	<select id="findBugById" parameterType="string" resultType="com.johnny.johnnyBlog.entity.FullTestBug">
- 		select a.bug_content,a.version,a.deadline,a.bug_title,b.product_name,c.module_name,d.project_name,e.person_name,f.bugtype_name
+ 		select a.bug_content_withoutHtml,a.bug_content,a.version,a.deadline,a.bug_title,b.product_name,c.module_name,d.project_name,e.person_name,f.bugtype_name
 		from bug a 
 		join product b 
 		on a.product_id = b.product_id 
@@ -73,6 +73,6 @@
  		select * from bug where bug_id = #{bugId}
  	</select>
  	<update id="updateBugById" parameterType="com.johnny.johnnyBlog.entity.TestBug">
- 		update bug set product_id=#{product_id},module_id=#{module_id},project_id=#{project_id},version=#{version},person_id=#{person_id},deadline=#{deadline},bugtype_id=#{bugtype_id},bug_title=#{bug_title},bug_content=#{bug_content} where bug_id=#{bug_id}
+ 		update bug set product_id=#{product_id},module_id=#{module_id},project_id=#{project_id},version=#{version},person_id=#{person_id},deadline=#{deadline},bugtype_id=#{bugtype_id},bug_title=#{bug_title},bug_content=#{bug_content},bug_content_withoutHtml=#{bug_content_withoutHtml} where bug_id=#{bug_id}
  	</update>
  </mapper>

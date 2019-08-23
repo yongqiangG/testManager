@@ -13,6 +13,7 @@ public class TestBug {
 	private String bugtype_id;
 	private String bug_title;
 	private String bug_content;
+	private String bug_content_withoutHtml;
 	public String getProduct_id() {
 		return product_id;
 	}
@@ -79,5 +80,12 @@ public class TestBug {
 				+ project_id + ", version=" + version + ", person_id=" + person_id + ", deadline=" + deadline
 				+ ", bugtype_id=" + bugtype_id + ", bug_title=" + bug_title + ", bug_content=" + bug_content + "]";
 	}
+	public String getBug_content_withoutHtml() {
+		return bug_content_withoutHtml;
+	}
+	public void setBug_content_withoutHtml(String bug_content_withoutHtml) {
+		this.bug_content_withoutHtml = bug_content_withoutHtml;
+	}
+	
 	
 }

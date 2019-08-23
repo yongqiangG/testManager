@@ -20,4 +20,5 @@ public interface TestService {
 	public BlogResult<List<FullTestBug>> loadPartBug(int pageBegin,int pageSize);
 	public BlogResult<TestBug> findTestBugById(String bugId);
 	public void updateBug(TestBug bug);
+	public FullTestBug getPdf(String bugId);
 }

@@ -64,12 +64,13 @@
 		var bugtype = $("#bugtype option:selected").index();
 		var bugtitle = $("#bug-title").val();
 		var contents = editor.html();
+		var contentText = editor.text();
 		//console.log(product+","+module+","+project+","+version+","+person+","+deadline+","+bugtype+","+bugtitle+","+contents);
 		//发送请求
 		$.ajax({
 			url:"http://localhost:8885/johnnyBlog/test/saveBug.do",
 			type:"post",
-			data:{"product":product,"module":module,"project":project,"version":version,"person":person,"deadline":deadline,"bugtype":bugtype,"bugtitle":bugtitle,"contents":contents},
+			data:{"product":product,"module":module,"project":project,"version":version,"person":person,"deadline":deadline,"bugtype":bugtype,"bugtitle":bugtitle,"contents":contents,"contents_withoutHtml":contentText},
 			dataType:"json",
 			success:function(result){
 				//alert("保存成功");

@@ -1,17 +1,24 @@
 package com.johnny.johnnyBlog.controller;
 
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itextpdf.text.DocumentException;
 import com.johnny.johnnyBlog.entity.FullTestBug;
 import com.johnny.johnnyBlog.entity.TestBug;
 import com.johnny.johnnyBlog.service.TestService;
 import com.johnny.johnnyBlog.utils.BlogResult;
+import com.johnny.johnnyBlog.utils.WriterBugPdf;
 
 @Controller
 @RequestMapping("/test")
@@ -50,13 +57,14 @@ public class TestController {
 	}
 	@RequestMapping("/saveBug.do")
 	@ResponseBody
-	public BlogResult execute5(String product,String module,String project,String version,String person,String deadline,String bugtype,String bugtitle,String contents) {
+	public BlogResult execute5(String product,String module,String project,String version,String person,String deadline,String bugtype,String bugtitle,String contents,String contents_withoutHtml) {
 		//System.out.println("saveBug()");
 		//System.out.println(product+","+module+","+project+","+version+","+person+","+deadline+","+bugtype+","+bugtitle+","+contents);
 		String t = deadline+" 12:00:00";
 		Timestamp ts = Timestamp.valueOf(t);
 		TestBug bug = new TestBug();
 		bug.setBug_content(contents);
+		bug.setBug_content_withoutHtml(contents_withoutHtml);
 		bug.setBug_title(bugtitle);
 		bug.setBugtype_id(bugtype);
 		bug.setDeadline(ts);
@@ -98,11 +106,12 @@ public class TestController {
 	}
 	@RequestMapping("/updateBug.do")
 	@ResponseBody
-	public BlogResult execute10(String bugId,String product,String module,String project,String version,String person,String deadline,String bugtype,String bugtitle,String contents) {
+	public BlogResult execute10(String bugId,String product,String module,String project,String version,String person,String deadline,String bugtype,String bugtitle,String contents,String contents_withoutHtml) {
 		String t = deadline+" 12:00:00";
 		Timestamp ts = Timestamp.valueOf(t);
 		TestBug bug = new TestBug();
 		bug.setBug_content(contents);
+		bug.setBug_content_withoutHtml(contents_withoutHtml);
 		bug.setBug_title(bugtitle);
 		bug.setBugtype_id(bugtype);
 		bug.setDeadline(ts);
@@ -117,6 +126,18 @@ public class TestController {
 		BlogResult result = new BlogResult();
 		result.setMsg("保存成功");
 		result.setStatus(1);
+		return result;
+	}
+	@RequestMapping("/getPdf.do")
+	@ResponseBody
+	public BlogResult execute11(String bugId) throws DocumentException, IOException {
+		FullTestBug bug = service.getPdf(bugId);
+		//System.out.println(bug);
+		String pdfUrl = WriterBugPdf.writePdf(bug);
+		Map<String,Object> m = new HashMap();
+		m.put("pdf", pdfUrl);
+		BlogResult result = new BlogResult();
+		result.setData(m);
 		return result;
 	}
 	

@@ -111,6 +111,7 @@
 					$("#project").val(project);
 					$("#person").val(person);
 					$("#bugtype").val(bugType);
+					//console.log(editor.text());
 				}
 			},
 			error:function(){
@@ -291,12 +292,14 @@
 		var newBugtype = $("#bugtype option:selected").index();
 		var newBugtitle = $("#bug-title").val();
 		var newContents = editor.html();
+		var contentText = editor.text();
+		//console.log(contentText);
 		//console.log(newProduct+","+newModule+","+newProject+","+newVersion+","+newPerson+","+newDeadline+","+newBugtype+","+newBugtitle+","+newContents+","+bugId);
 		//发送请求
 		$.ajax({
 			url:"http://localhost:8885/johnnyBlog/test/updateBug.do",
 			type:"post",
-			data:{"bugId":bugId,"product":newProduct,"module":newModule,"project":newProject,"version":newVersion,"person":newPerson,"deadline":newDeadline,"bugtype":newBugtype,"bugtitle":newBugtitle,"contents":newContents},
+			data:{"bugId":bugId,"product":newProduct,"module":newModule,"project":newProject,"version":newVersion,"person":newPerson,"deadline":newDeadline,"bugtype":newBugtype,"bugtitle":newBugtitle,"contents":newContents,"contents_withoutHtml":contentText},
 			dataType:"json",
 			success:function(result){
 				//alert("保存成功");
@@ -507,7 +510,7 @@
               </select>
               <span class="prompt-text">栏目是有层级关系的，您可以有一个“音乐”分类目录，在这个目录下可以有叫做“流行”和“古典”的子目录。</span> </div> -->
             <!-- 触发模态弹出窗的元素 -->
-			<button type="button" data-toggle="modal" data-target="#mymodal" class="btn btn-primary" onclick="updateBug()">更新Bug</button>
+			<button type="button" data-toggle="modal" data-target="#mymodal" class="btn btn-primary" onclick="">更新Bug</button>
 			<!-- 模态弹出窗 -->
 			<div class="modal fade" id="mymodal">
 			    <div class="modal-dialog">

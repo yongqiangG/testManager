@@ -174,6 +174,23 @@
 		//},5000)
 		location.href="/johnnyBlog/updateBug.html?bugId="+bugId;
 	}
+	function getPdf(){
+		$.ajax({
+			url:"http://localhost:8885/johnnyBlog/test/getPdf.do",
+			type:"post",
+			data:{"bugId":bugId},
+			dataType:"json",
+			success:function(result){
+				//alert("getPdf() successful");
+				var pdfUrl = result.data.pdf;
+				//alert(pdfUrl);
+				location.href=pdfUrl;
+			},
+			errorZ:function(result){
+				alert("fail to getPdf()");
+			}
+		})
+	}
 	
 	
 </script>
@@ -274,6 +291,7 @@
               </div>
             </div>
             <input type="button" value="更新bug信息" onclick="updateBug()" class="btn btn-primary"/>
+            <input type="button" value="getPdf" onclick="getPdf()" class="btn btn-primary"/>
           </div>
           <div class="col-md-3">
             <h1 class="page-header">基本信息</h1>
