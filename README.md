@@ -32,3 +32,7 @@ Spring+SpringMVC+Mybatis+Mysql+DBCP
 #### Mysql配置
 * a.数据库连接：spring-mybatis.xml
 * b.数据库的sql包括ddl和dml，放在项目resources文件夹下。
+#### 技术支持
+- 个人微信号：gaoyongqiang6283
+- 个人QQ：874891756
+- 个人邮箱:874891756@qq.com或johnny.gor10@gmail.com
