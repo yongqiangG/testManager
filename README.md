@@ -21,18 +21,18 @@ html+css+javascript;bootstrap+jquery+ajax;
 无
 #### 开源弹框组件：
 bootstrap
-#### Markdown编辑器：
+#### 富文本编辑器：
 Kindeditor
 #### 容器：
 Tomcat8.5
 #### 权限：
 无
 #### 后端：
-Spring+SpringMVC+Mybatis+Mysql+DBCP
+Spring+SpringMVC+Mybatis+Mysql+DBCP连接池
 #### Mysql配置
-* a.数据库连接：spring-mybatis.xml
+* a.数据库连接配置：spring-mybatis.xml
 * b.数据库的sql包括ddl和dml，放在项目resources文件夹下。
-#### 技术支持
+## 3.技术支持
 - 个人微信号：gaoyongqiang6283
 - 个人QQ：874891756
 - 个人邮箱:874891756@qq.com或johnny.gor10@gmail.com
