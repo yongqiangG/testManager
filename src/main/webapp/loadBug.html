@@ -158,12 +158,12 @@
     		pageSearch(pageNow,pageSize);
     		$("#pageCount").html("当前位于第"+pageNow+"页");
     	}else{
-    		alert('----------没有下一页了----------');
+    		alert("-----没有下一页啦-----");
     	}
     }
     function previousPage(){
     	if(pageNow==1){
-    		alert("----------没有上一页了----------")
+    		alert("-----没有上一页啦-----");
     	}else{
     		pageNow=pageNow-1;
     		pageSearch(pageNow,pageSize)
@@ -290,6 +290,7 @@
               <li><a href="#">3</a></li>
               <li><a href="#">4</a></li>
               <li><a href="#">5</a></li> -->
+              <!-- <li id="firstPage" onclick="firstPage()"><a>回到首页</a></li> -->
               <li><a href='#' id="pageCount"></a></li>
               <li id="next" onclick="nextPage()"><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>
             </ul>
@@ -439,6 +440,25 @@
     <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
   </ul>
 </div>
+<!-- 模态弹出窗 -->
+			<div class="modal fade" id="mymodal">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			                <h4 class="modal-title">新增BUG</h4>
+			            </div>
+			            <div class="modal-body">
+			                <p></p>
+			            </div>
+			            <div class="modal-footer">
+			            	<span id="mymodalFooter"></span>
+			                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			                <button type="button" class="btn btn-primary">保存</button> -->
+			            </div>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
 <script src="js/bootstrap.min.js"></script> 
 <script>
 //是否确认删除

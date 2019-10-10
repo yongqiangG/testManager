@@ -62,11 +62,12 @@ public class WriterBugPdf {
 			document.add(new Paragraph("Contents:",font));
 			String dest = "";
 			if (content_withoutHtml!=null) {
-	            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+	            Pattern p = Pattern.compile("\\s*|\r|\n");
 	            Matcher m = p.matcher(content_withoutHtml);
 	            dest = m.replaceAll("");
 	        }
 			String[] dest1 = dest.split("<|>");
+			String[] dest2;
 			for(String str:dest1) {
 				if(str.contains("img")) {
 					String imgPath = str.substring(str.indexOf('"')+1,str.indexOf('"',8));
@@ -78,8 +79,10 @@ public class WriterBugPdf {
 				    //插入一个图片
 				    document.add(image);
 				}else {
-					document.add(new Paragraph(str,font));
-					System.out.println(str);
+					dest2 = str.split("\t");
+					for(String str1:dest2) {
+						document.add(new Paragraph(str1,font));
+					}
 				}
 			}
 			document.close();

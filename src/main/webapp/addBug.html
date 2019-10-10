@@ -67,29 +67,48 @@
 		var contentText = editor.text();
 		//console.log(product+","+module+","+project+","+version+","+person+","+deadline+","+bugtype+","+bugtitle+","+contents);
 		//发送请求
-		$.ajax({
-			url:"http://localhost:8885/johnnyBlog/test/saveBug.do",
-			type:"post",
-			data:{"product":product,"module":module,"project":project,"version":version,"person":person,"deadline":deadline,"bugtype":bugtype,"bugtitle":bugtitle,"contents":contents,"contents_withoutHtml":contentText},
-			dataType:"json",
-			success:function(result){
-				//alert("保存成功");
-				$("#mymodal p").html("新增成功");
-				$("#mymodalFooter").html("即将跳转BUG页面");
-				setTimeout(function(){
-					location.href="/johnnyBlog/loadBug.html";
-				},2000);
-				
-			},
-			error:function(result){
-				//alert("提交失败");
-				$("#mymodal p").html("新增失败，请仔细检查所有参数是否正确填写");
-				$("#mymodalFooter").html("即将返回新增BUG页面");
-				setTimeout(function(){
-					$("#mymodal").modal("hide")
-				},2000);
-			}
-		})
+		if(product==0 ||
+		   module==0 ||
+		   project==0 ||
+		   version==null ||
+		   version=='' ||
+		   person==0 ||
+		   deadline==null ||
+		   deadline=='' ||
+		   bugtype==0 ||
+		   bugtitle==null ||
+		   bugtitle==''){
+			$("#mymodal p").html("提交失败,请检查是否有参数没有输入");
+			$("#mymodalFooter").html("即将返回新增BUG页面");
+			setTimeout(function(){
+				$("#mymodal").modal("hide")
+			},2000);
+		}else{
+			$.ajax({
+				url:"http://localhost:8885/johnnyBlog/test/saveBug.do",
+				type:"post",
+				data:{"product":product,"module":module,"project":project,"version":version,"person":person,"deadline":deadline,"bugtype":bugtype,"bugtitle":bugtitle,"contents":contents,"contents_withoutHtml":contentText},
+				dataType:"json",
+				success:function(result){
+					//alert("保存成功");
+					$("#mymodal p").html("新增成功");
+					$("#mymodalFooter").html("即将跳转BUG页面");
+					setTimeout(function(){
+						location.href="/johnnyBlog/loadBug.html";
+					},2000);
+					
+				},
+				error:function(result){
+					//alert("提交失败");
+					$("#mymodal p").html("新增失败，请仔细检查所有参数是否正确填写");
+					$("#mymodalFooter").html("即将返回新增BUG页面");
+					setTimeout(function(){
+						$("#mymodal").modal("hide")
+					},2000);
+				}
+			})
+		}
+		
 	}
 		//console.log("sendBug()");
 
@@ -259,9 +278,254 @@
                                             重现步骤
               <input type="hidden" id="contents" name="content">
               <textarea id="content" name="description">
-					<h4>【步骤】</h4><br/><br/>
-					<h4>【结果】</h4><br/><br/>
-					<h4>【预期】</h4><br/><br/>
+					<h2 style="text-align:center;">
+	主标题
+</h2>
+<p>
+	<br />
+</p>
+<h3>
+	测试内容:
+</h3>
+<p>
+	<br />
+</p>
+<p>
+	1.
+</p>
+<p>
+	2.
+</p>
+<p>
+	3.
+</p>
+<p>
+	<br />
+</p>
+<h3>
+	测试用例:
+</h3>
+<p>
+	<br />
+</p>
+<h4>
+	1.<span>测试一</span> 
+</h4>
+<p>
+	<table style="width:700px;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+		<tbody>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					<br />
+				</td>
+				<td>
+					<br />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</p>
+<p>
+	<br />
+</p>
+<h4>
+	2.<span>测试二</span> 
+</h4>
+<p>
+	<table style="width:700px;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+		<tbody>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					<br />
+				</td>
+				<td>
+					<br />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</p>
+<p>
+	<br />
+</p>
+<h4>
+	3.<span>测试三</span> 
+</h4>
+<p>
+	<table style="width:700px;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+		<tbody>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				</td>
+				<td>
+					<br />
+				</td>
+				<td>
+					<br />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</p>
+<p>
+	<br />
+</p>
+
+<h4>
+	<span>其余问题:</span> 
+</h4>
+<p>
+	<br />
+</p>
+<h4>
+	<span>测试综述:</span> 
+</h4>
+<p>
+	<br />
+</p>
+<h4>
+	<span><span>附测试图:</span></span> 
+</h4>
+					
 			  </textarea>
 			  </div>
             <!-- 下拉选模板
