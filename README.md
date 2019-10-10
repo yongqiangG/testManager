@@ -30,8 +30,8 @@ Tomcat8.5
 #### 后端：
 Spring+SpringMVC+Mybatis+Mysql+DBCP连接池
 #### Mysql配置
-* a.数据库连接配置：spring-mybatis.xml
-* b.数据库的sql包括ddl和dml，放在项目resources文件夹下。
+- 数据库连接配置：spring-mybatis.xml
+- 数据库的sql包括ddl和dml，放在项目resources文件夹下。
 ## 3.技术支持
 - 个人微信号：gaoyongqiang6283
 - 个人QQ：874891756
