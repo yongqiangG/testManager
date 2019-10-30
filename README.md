@@ -16,7 +16,8 @@
 #### 开发环境：
 Tomcat8.5+JDK1.8+Mysql5.6
 #### 前端：
-html+css+javascript;bootstrap+jquery+ajax;
+html+css+javascript  
+bootstrap+jquery+ajax
 #### 模板引擎：
 无
 #### 开源弹框组件：
